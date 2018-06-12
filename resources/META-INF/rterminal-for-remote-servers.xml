@@ -1,0 +1,7 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceInterface="com.intellij.remoteServer.impl.runtime.log.CloudTerminalProvider"
+                            serviceImplementation="maksimaleshko.intellij.plugin.rterminal.cloud.CloudTerminalProviderImpl"
+                            overrides="true"/>
+    </extensions>
+</idea-plugin>

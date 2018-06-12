@@ -1,0 +1,23 @@
+<idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude">
+    <id>maksimaleshko.intellij.plugin.rterminal</id>
+    <name>RTerminal</name>
+    <version>0.1</version>
+    <vendor email="maksim.aleshko@higher-order.tech">Maksim Aleshko</vendor>
+    <description>Embedded Terminal by JetBrains with few enhancements.</description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <resource-bundle>META-INF.messages.RTerminalBundle</resource-bundle>
+
+    <xi:include href="/META-INF/rterminal.xml" xpointer="xpointer(/idea-plugin/*)"/>
+
+    <actions>
+        <action id="Terminal.OpenInTerminal"
+                class="maksimaleshko.intellij.plugin.rterminal.action.RevealFileInTerminalAction"
+                text="Open in RTerminal"
+                description="Open current file location in RTerminal"
+                icon="RTerminalIcons.OpenTerminal_13x13">
+            <add-to-group group-id="RevealGroup" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>

@@ -1,0 +1,32 @@
+<idea-plugin>
+    <depends optional="true" config-file="rterminal-for-remote-servers.xml">com.intellij.modules.remoteServers</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="RTerminal" anchor="bottom" icon="RTerminalIcons.OpenTerminal_13x13"
+                    factoryClass="maksimaleshko.intellij.plugin.rterminal.RTerminalToolWindowFactory"
+                    secondary="false"/>
+
+        <projectConfigurable groupId="tools" groupWeight="130" displayName="RTerminal"
+                             id="maksimaleshko.intellij.plugin.rterminal"
+                             instance="maksimaleshko.intellij.plugin.rterminal.RTerminalOptionsConfigurable"/>
+
+        <fileEditorProvider
+                implementation="maksimaleshko.intellij.plugin.rterminal.vfs.RTerminalSessionEditorProvider"/>
+
+        <applicationService serviceImplementation="maksimaleshko.intellij.plugin.rterminal.RTerminalOptionsProvider"/>
+        <projectService
+                serviceImplementation="maksimaleshko.intellij.plugin.rterminal.RTerminalProjectOptionsProvider"/>
+    </extensions>
+
+    <project-components>
+        <component>
+            <interface-class>maksimaleshko.intellij.plugin.rterminal.RTerminalView</interface-class>
+            <implementation-class>maksimaleshko.intellij.plugin.rterminal.RTerminalView</implementation-class>
+        </component>
+    </project-components>
+
+    <extensionPoints>
+        <extensionPoint qualifiedName="maksimaleshko.intellij.plugin.rterminal.localTerminalCustomizer"
+                        interface="maksimaleshko.intellij.plugin.rterminal.LocalTerminalCustomizer"/>
+    </extensionPoints>
+</idea-plugin>
