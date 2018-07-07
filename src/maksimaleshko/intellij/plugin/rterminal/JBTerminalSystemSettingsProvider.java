@@ -36,7 +36,7 @@ public class JBTerminalSystemSettingsProvider extends JBTerminalSystemSettingsPr
 
   @Override
   public boolean shouldCloseTabOnLogout(TtyConnector ttyConnector) {
-    return RTerminalOptionsProvider.Companion.getInstance().closeSessionOnLogout();
+    return RTerminalApplicationOptionsProvider.Companion.getInstance().getCloseSessionOnLogout();
   }
 
   @Override
@@ -44,7 +44,7 @@ public class JBTerminalSystemSettingsProvider extends JBTerminalSystemSettingsPr
     if (ttyConnector instanceof PtyProcessTtyConnector) {
       String tabName = RTerminalProjectOptionsProvider.Companion.getInstance(myProject).getTabName();
       if (StringUtil.isEmptyOrSpaces(tabName)) {
-        tabName = RTerminalOptionsProvider.Companion.getInstance().getTabName();
+        tabName = RTerminalApplicationOptionsProvider.Companion.getInstance().getTabName();
       }
 
       return tabName;
@@ -57,22 +57,22 @@ public class JBTerminalSystemSettingsProvider extends JBTerminalSystemSettingsPr
 
   @Override
   public boolean audibleBell() {
-    return RTerminalOptionsProvider.Companion.getInstance().audibleBell();
+    return RTerminalApplicationOptionsProvider.Companion.getInstance().getSoundBell();
   }
 
   @Override
   public boolean enableMouseReporting() {
-    return RTerminalOptionsProvider.Companion.getInstance().enableMouseReporting();
+    return RTerminalApplicationOptionsProvider.Companion.getInstance().getReportMouse();
   }
 
   @Override
   public boolean copyOnSelect() {
-    return RTerminalOptionsProvider.Companion.getInstance().copyOnSelection();
+    return RTerminalApplicationOptionsProvider.Companion.getInstance().getCopyOnSelection();
   }
 
   @Override
   public boolean pasteOnMiddleMouseClick() {
-    return RTerminalOptionsProvider.Companion.getInstance().pasteOnMiddleMouseButton();
+    return RTerminalApplicationOptionsProvider.Companion.getInstance().getPasteOnMiddleMouseButton();
   }
 
   @Override
@@ -82,12 +82,12 @@ public class JBTerminalSystemSettingsProvider extends JBTerminalSystemSettingsPr
 
   @Override
   public boolean overrideIdeShortcuts() {
-    return RTerminalOptionsProvider.Companion.getInstance().overrideIdeShortcuts();
+    return RTerminalApplicationOptionsProvider.Companion.getInstance().getOverrideIdeShortcuts();
   }
 
   @Override
   public HyperlinkStyle.HighlightMode getHyperlinkHighlightingMode() {
-    return RTerminalOptionsProvider.Companion.getInstance().highlightHyperlinks()
+    return RTerminalApplicationOptionsProvider.Companion.getInstance().getHighlightHyperlinks()
            ? HyperlinkStyle.HighlightMode.ALWAYS
            : HyperlinkStyle.HighlightMode.HOVER;
   }

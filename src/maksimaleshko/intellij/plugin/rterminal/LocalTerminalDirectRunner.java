@@ -175,13 +175,13 @@ public class LocalTerminalDirectRunner extends AbstractTerminalRunner<PtyProcess
 
     String shellPath = getShellPath();
 
-    return getCommand(shellPath, envs, RTerminalOptionsProvider.Companion.getInstance().shellIntegration());
+    return getCommand(shellPath, envs, RTerminalApplicationOptionsProvider.Companion.getInstance().getShellIntegration());
   }
 
   private String getShellPath() {
     String shellPath = RTerminalProjectOptionsProvider.Companion.getInstance(myProject).getShellPath();
     if (StringUtil.isEmptyOrSpaces(shellPath)) {
-      RTerminalOptionsProvider.Companion.getInstance().getShellPath();
+      RTerminalApplicationOptionsProvider.Companion.getInstance().getShellPath();
     }
 
     return shellPath;

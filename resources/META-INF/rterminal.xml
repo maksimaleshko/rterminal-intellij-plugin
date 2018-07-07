@@ -13,7 +13,7 @@
         <fileEditorProvider
                 implementation="maksimaleshko.intellij.plugin.rterminal.vfs.RTerminalSessionEditorProvider"/>
 
-        <applicationService serviceImplementation="maksimaleshko.intellij.plugin.rterminal.RTerminalOptionsProvider"/>
+        <applicationService serviceImplementation="maksimaleshko.intellij.plugin.rterminal.RTerminalApplicationOptionsProvider"/>
         <projectService
                 serviceImplementation="maksimaleshko.intellij.plugin.rterminal.RTerminalProjectOptionsProvider"/>
     </extensions>

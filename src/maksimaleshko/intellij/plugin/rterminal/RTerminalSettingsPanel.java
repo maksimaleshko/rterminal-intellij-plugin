@@ -26,190 +26,186 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.JBCheckBox;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.util.Arrays;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author traff
  */
 public class RTerminalSettingsPanel {
-  private JPanel myWholePanel;
-  private TextFieldWithBrowseButton myStartDirectoryField;
-  private TextFieldWithBrowseButton myProjectShellPathField;
-  private JTextField myProjectTabNameTextField;
-  private TextFieldWithBrowseButton myShellPathField;
-  private JBCheckBox mySoundBellCheckBox;
-  private JBCheckBox myCloseSessionCheckBox;
-  private JBCheckBox myMouseReportCheckBox;
-  private JTextField myTabNameTextField;
-  private JBCheckBox myPasteOnMiddleButtonCheckBox;
-  private JBCheckBox myCopyOnSelectionCheckBox;
-  private JBCheckBox myOverrideIdeShortcuts;
-  private JBCheckBox myShellIntegration;
-  private JPanel myProjectSettingsPanel;
-  private JPanel myGlobalSettingsPanel;
-  private JPanel myConfigurablesPanel;
-  private JBCheckBox myHighlightHyperlinks;
-  private RTerminalOptionsProvider myOptionsProvider;
-  private RTerminalProjectOptionsProvider myProjectOptionsProvider;
+    private TextFieldWithBrowseButton projectStartingDirectory;
+    private TextFieldWithBrowseButton projectShellPath;
+    private JTextField projectTabName;
+    private TextFieldWithBrowseButton applicationShellPath;
+    private JTextField applicationTabName;
+    private JBCheckBox applicationSoundBell;
+    private JBCheckBox applicationCloseSessionOnLogout;
+    private JBCheckBox applicationReportMouse;
+    private JBCheckBox applicationCopyOnSelection;
+    private JBCheckBox applicationPasteOnMiddleMouseButton;
+    private JBCheckBox applicationOverrideIdeShortcuts;
+    private JBCheckBox applicationShellIntegration;
+    private JBCheckBox applicationHighlightHyperlinks;
+    private JPanel projectSettingsPanel;
+    private JPanel applicationSettingsPanel;
+    private JPanel configurablesPanel;
+    private JPanel panel;
+    private RTerminalApplicationOptionsProvider applicationOptionsProvider;
+    private RTerminalProjectOptionsProvider projectOptionsProvider;
 
-  private final java.util.List<UnnamedConfigurable> myConfigurables = Lists.newArrayList();
+    private final java.util.List<UnnamedConfigurable> configurables = Lists.newArrayList();
 
-  public JComponent createPanel(@NotNull RTerminalOptionsProvider provider, @NotNull RTerminalProjectOptionsProvider projectOptionsProvider) {
-    myOptionsProvider = provider;
-    myProjectOptionsProvider = projectOptionsProvider;
+    public JComponent createPanel(@NotNull RTerminalApplicationOptionsProvider applicationOptionsProvider, @NotNull RTerminalProjectOptionsProvider projectOptionsProvider) {
+        this.applicationOptionsProvider = applicationOptionsProvider;
+        this.projectOptionsProvider = projectOptionsProvider;
 
-    myProjectSettingsPanel.setBorder(IdeBorderFactory.createTitledBorder("Project settings"));
-    myGlobalSettingsPanel.setBorder(IdeBorderFactory.createTitledBorder("Application settings"));
+        projectSettingsPanel.setBorder(IdeBorderFactory.createTitledBorder("Project settings"));
+        applicationSettingsPanel.setBorder(IdeBorderFactory.createTitledBorder("Application settings"));
 
-    FileChooserDescriptor fileChooserDescriptor;
+        FileChooserDescriptor fileChooserDescriptor = new FileChooserDescriptor(false, true, false, false, false, false);
+        projectStartingDirectory.addBrowseFolderListener(
+                "",
+                "Starting directory",
+                null,
+                fileChooserDescriptor,
+                TextComponentAccessor.TEXT_FIELD_WHOLE_TEXT);
+        projectStartingDirectory.getTextField().getDocument().addDocumentListener(new DocumentAdapter() {
+            @Override
+            protected void textChanged(DocumentEvent e) {
+                projectStartingDirectory.getTextField().setForeground(
+                        StringUtil.equals(projectStartingDirectory.getText(), RTerminalSettingsPanel.this.projectOptionsProvider.getDefaultStartingDirectory()) ?
+                                getDefaultValueColor() :
+                                getChangedValueColor());
+            }
+        });
 
-    fileChooserDescriptor = new FileChooserDescriptor(false, true, false, false, false, false);
-    myStartDirectoryField.addBrowseFolderListener(
-      "",
-      "Starting directory",
-      null,
-      fileChooserDescriptor,
-      TextComponentAccessor.TEXT_FIELD_WHOLE_TEXT);
-    myStartDirectoryField.getTextField().getDocument().addDocumentListener(new DocumentAdapter() {
-      @Override
-      protected void textChanged(DocumentEvent e) {
-        myStartDirectoryField.getTextField().setForeground(
-                StringUtil.equals(myStartDirectoryField.getText(), myProjectOptionsProvider.getDefaultStartingDirectory()) ?
-                        getDefaultValueColor() :
-                        getChangedValueColor());
-      }
-    });
+        fileChooserDescriptor = new FileChooserDescriptor(true, false, false, false, false, false);
+        projectShellPath.addBrowseFolderListener(
+                "",
+                "Shell executable path",
+                null,
+                fileChooserDescriptor,
+                TextComponentAccessor.TEXT_FIELD_WHOLE_TEXT);
+        projectShellPath.getTextField().getDocument().addDocumentListener(new DocumentAdapter() {
+            @Override
+            protected void textChanged(DocumentEvent e) {
+                projectShellPath.getTextField().setForeground(
+                        StringUtil.equals(projectShellPath.getText(), RTerminalSettingsPanel.this.projectOptionsProvider.getDefaultShellPath()) ?
+                                getDefaultValueColor() :
+                                getChangedValueColor());
+            }
+        });
 
-    fileChooserDescriptor = new FileChooserDescriptor(true, false, false, false, false, false);
-    myProjectShellPathField.addBrowseFolderListener(
-            "",
-            "Shell executable path",
-            null,
-            fileChooserDescriptor,
-            TextComponentAccessor.TEXT_FIELD_WHOLE_TEXT);
-    myProjectShellPathField.getTextField().getDocument().addDocumentListener(new DocumentAdapter() {
-      @Override
-      protected void textChanged(DocumentEvent e) {
-        myProjectShellPathField.getTextField().setForeground(
-                StringUtil.equals(myProjectShellPathField.getText(), myProjectOptionsProvider.getDefaultShellPath()) ?
-                        getDefaultValueColor() :
-                        getChangedValueColor());
-      }
-    });
+        fileChooserDescriptor = new FileChooserDescriptor(true, false, false, false, false, false);
+        applicationShellPath.addBrowseFolderListener(
+                "",
+                "Shell executable path",
+                null,
+                fileChooserDescriptor,
+                TextComponentAccessor.TEXT_FIELD_WHOLE_TEXT);
+        applicationShellPath.getTextField().getDocument().addDocumentListener(new DocumentAdapter() {
+            @Override
+            protected void textChanged(DocumentEvent e) {
+                applicationShellPath.getTextField().setForeground(
+                        StringUtil.equals(applicationShellPath.getText(), applicationOptionsProvider.getDefaultShellPath()) ?
+                                getDefaultValueColor() :
+                                getChangedValueColor());
+            }
+        });
 
-    fileChooserDescriptor = new FileChooserDescriptor(true, false, false, false, false, false);
-    myShellPathField.addBrowseFolderListener(
-            "",
-            "Shell executable path",
-            null,
-            fileChooserDescriptor,
-            TextComponentAccessor.TEXT_FIELD_WHOLE_TEXT);
-    myShellPathField.getTextField().getDocument().addDocumentListener(new DocumentAdapter() {
-      @Override
-      protected void textChanged(DocumentEvent e) {
-        myShellPathField.getTextField().setForeground(
-                StringUtil.equals(myShellPathField.getText(), myOptionsProvider.getDefaultShellPath()) ?
-                        getDefaultValueColor() :
-                        getChangedValueColor());
-      }
-    });
-
-    for (LocalTerminalCustomizer c : LocalTerminalCustomizer.EP_NAME.getExtensions()) {
-      UnnamedConfigurable configurable = c.getConfigurable(projectOptionsProvider.getProject());
-      if (configurable != null) {
-        myConfigurables.add(configurable);
-        JComponent component = configurable.createComponent();
-        if (component != null) {
-          myConfigurablesPanel.add(component, BorderLayout.CENTER);
+        for (LocalTerminalCustomizer customizer : LocalTerminalCustomizer.EP_NAME.getExtensions()) {
+            UnnamedConfigurable configurable = customizer.getConfigurable(projectOptionsProvider.getProject());
+            if (configurable != null) {
+                configurables.add(configurable);
+                JComponent component = configurable.createComponent();
+                if (component != null) {
+                    configurablesPanel.add(component, BorderLayout.CENTER);
+                }
+            }
         }
-      }
+
+        return panel;
     }
 
-    return myWholePanel;
-  }
-
-  public boolean isModified() {
-    return !Comparing.equal(myStartDirectoryField.getText(), StringUtil.notNullize(myProjectOptionsProvider.getStartingDirectory()))
-           || !Comparing.equal(myProjectShellPathField.getText(), myProjectOptionsProvider.getShellPath())
-           || !Comparing.equal(myProjectTabNameTextField.getText(), myProjectOptionsProvider.getTabName())
-           || !Comparing.equal(myShellPathField.getText(), myOptionsProvider.getShellPath())
-           || !Comparing.equal(myTabNameTextField.getText(), myOptionsProvider.getTabName())
-           || (myCloseSessionCheckBox.isSelected() != myOptionsProvider.closeSessionOnLogout())
-           || (myMouseReportCheckBox.isSelected() != myOptionsProvider.enableMouseReporting())
-           || (mySoundBellCheckBox.isSelected() != myOptionsProvider.audibleBell())
-           || (myCopyOnSelectionCheckBox.isSelected() != myOptionsProvider.copyOnSelection())
-           || (myPasteOnMiddleButtonCheckBox.isSelected() != myOptionsProvider.pasteOnMiddleMouseButton())
-           || (myOverrideIdeShortcuts.isSelected() != myOptionsProvider.overrideIdeShortcuts())
-           || (myShellIntegration.isSelected() != myOptionsProvider.shellIntegration())
-           || (myHighlightHyperlinks.isSelected() != myOptionsProvider.highlightHyperlinks()) ||
-           myConfigurables.stream().anyMatch(UnnamedConfigurable::isModified);
-  }
-
-  public void apply() {
-    myProjectOptionsProvider.setStartingDirectory(myStartDirectoryField.getText());
-    myProjectOptionsProvider.setShellPath(myProjectShellPathField.getText());
-    myProjectOptionsProvider.setTabName(myProjectTabNameTextField.getText());
-    myOptionsProvider.setShellPath(myShellPathField.getText());
-    myOptionsProvider.setTabName(myTabNameTextField.getText());
-    myOptionsProvider.setCloseSessionOnLogout(myCloseSessionCheckBox.isSelected());
-    myOptionsProvider.setReportMouse(myMouseReportCheckBox.isSelected());
-    myOptionsProvider.setSoundBell(mySoundBellCheckBox.isSelected());
-    myOptionsProvider.setCopyOnSelection(myCopyOnSelectionCheckBox.isSelected());
-    myOptionsProvider.setPasteOnMiddleMouseButton(myPasteOnMiddleButtonCheckBox.isSelected());
-    myOptionsProvider.setOverrideIdeShortcuts(myOverrideIdeShortcuts.isSelected());
-    myOptionsProvider.setShellIntegration(myShellIntegration.isSelected());
-    myOptionsProvider.setHighlightHyperlinks(myHighlightHyperlinks.isSelected());
-    myConfigurables.forEach(c -> {
-      try {
-        c.apply();
-      }
-      catch (ConfigurationException e) {
-        //pass
-      }
-    });
-  }
-
-  public void reset() {
-    myStartDirectoryField.setText(myProjectOptionsProvider.getStartingDirectory());
-    myProjectShellPathField.setText(myProjectOptionsProvider.getShellPath());
-    myProjectTabNameTextField.setText(myProjectOptionsProvider.getTabName());
-    myShellPathField.setText(myOptionsProvider.getShellPath());
-    myTabNameTextField.setText(myOptionsProvider.getTabName());
-    myCloseSessionCheckBox.setSelected(myOptionsProvider.closeSessionOnLogout());
-    myMouseReportCheckBox.setSelected(myOptionsProvider.enableMouseReporting());
-    mySoundBellCheckBox.setSelected(myOptionsProvider.audibleBell());
-    myCopyOnSelectionCheckBox.setSelected(myOptionsProvider.copyOnSelection());
-    myPasteOnMiddleButtonCheckBox.setSelected(myOptionsProvider.pasteOnMiddleMouseButton());
-    myOverrideIdeShortcuts.setSelected(myOptionsProvider.overrideIdeShortcuts());
-    myShellIntegration.setSelected(myOptionsProvider.shellIntegration());
-    myHighlightHyperlinks.setSelected(myOptionsProvider.highlightHyperlinks());
-    myConfigurables.forEach(UnnamedConfigurable::reset);
-  }
-
-  public Color getDefaultValueColor() {
-    return findColorByKey("TextField.inactiveForeground", "nimbusDisabledText");
-  }
-
-  @NotNull
-  private static Color findColorByKey(String... colorKeys) {
-    Color c = null;
-    for (String key : colorKeys) {
-      c = UIManager.getColor(key);
-      if (c != null) {
-        break;
-      }
+    public boolean isModified() {
+        return  !Comparing.equal(projectStartingDirectory.getText(), StringUtil.notNullize(projectOptionsProvider.getStartingDirectory())) ||
+                !Comparing.equal(projectShellPath.getText(), projectOptionsProvider.getShellPath()) ||
+                !Comparing.equal(projectTabName.getText(), projectOptionsProvider.getTabName()) ||
+                !Comparing.equal(applicationShellPath.getText(), applicationOptionsProvider.getShellPath()) ||
+                !Comparing.equal(applicationTabName.getText(), applicationOptionsProvider.getTabName()) ||
+                (applicationSoundBell.isSelected() != applicationOptionsProvider.getSoundBell()) ||
+                (applicationCloseSessionOnLogout.isSelected() != applicationOptionsProvider.getCloseSessionOnLogout()) ||
+                (applicationReportMouse.isSelected() != applicationOptionsProvider.getReportMouse()) ||
+                (applicationCopyOnSelection.isSelected() != applicationOptionsProvider.getCopyOnSelection()) ||
+                (applicationPasteOnMiddleMouseButton.isSelected() != applicationOptionsProvider.getPasteOnMiddleMouseButton()) ||
+                (applicationOverrideIdeShortcuts.isSelected() != applicationOptionsProvider.getOverrideIdeShortcuts()) ||
+                (applicationShellIntegration.isSelected() != applicationOptionsProvider.getShellIntegration()) ||
+                (applicationHighlightHyperlinks.isSelected() != applicationOptionsProvider.getHighlightHyperlinks()) ||
+                configurables.stream().anyMatch(UnnamedConfigurable::isModified);
     }
 
-    assert c != null : "Can't find color for keys " + Arrays.toString(colorKeys);
-    return c;
-  }
+    public void apply() {
+        projectOptionsProvider.setStartingDirectory(projectStartingDirectory.getText());
+        projectOptionsProvider.setShellPath(projectShellPath.getText());
+        projectOptionsProvider.setTabName(projectTabName.getText());
+        applicationOptionsProvider.setShellPath(applicationShellPath.getText());
+        applicationOptionsProvider.setTabName(applicationTabName.getText());
+        applicationOptionsProvider.setSoundBell(applicationSoundBell.isSelected());
+        applicationOptionsProvider.setCloseSessionOnLogout(applicationCloseSessionOnLogout.isSelected());
+        applicationOptionsProvider.setReportMouse(applicationReportMouse.isSelected());
+        applicationOptionsProvider.setCopyOnSelection(applicationCopyOnSelection.isSelected());
+        applicationOptionsProvider.setPasteOnMiddleMouseButton(applicationPasteOnMiddleMouseButton.isSelected());
+        applicationOptionsProvider.setOverrideIdeShortcuts(applicationOverrideIdeShortcuts.isSelected());
+        applicationOptionsProvider.setShellIntegration(applicationShellIntegration.isSelected());
+        applicationOptionsProvider.setHighlightHyperlinks(applicationHighlightHyperlinks.isSelected());
+        configurables.forEach(c -> {
+            try {
+                c.apply();
+            } catch (ConfigurationException e) {
+                //pass
+            }
+        });
+    }
 
-  public Color getChangedValueColor() {
-    return findColorByKey("TextField.foreground");
-  }
+    public void reset() {
+        projectStartingDirectory.setText(projectOptionsProvider.getStartingDirectory());
+        projectShellPath.setText(projectOptionsProvider.getShellPath());
+        projectTabName.setText(projectOptionsProvider.getTabName());
+        applicationShellPath.setText(applicationOptionsProvider.getShellPath());
+        applicationTabName.setText(applicationOptionsProvider.getTabName());
+        applicationSoundBell.setSelected(applicationOptionsProvider.getSoundBell());
+        applicationCloseSessionOnLogout.setSelected(applicationOptionsProvider.getCloseSessionOnLogout());
+        applicationReportMouse.setSelected(applicationOptionsProvider.getReportMouse());
+        applicationCopyOnSelection.setSelected(applicationOptionsProvider.getCopyOnSelection());
+        applicationPasteOnMiddleMouseButton.setSelected(applicationOptionsProvider.getPasteOnMiddleMouseButton());
+        applicationOverrideIdeShortcuts.setSelected(applicationOptionsProvider.getOverrideIdeShortcuts());
+        applicationShellIntegration.setSelected(applicationOptionsProvider.getShellIntegration());
+        applicationHighlightHyperlinks.setSelected(applicationOptionsProvider.getHighlightHyperlinks());
+        configurables.forEach(UnnamedConfigurable::reset);
+    }
+
+    public Color getDefaultValueColor() {
+        return findColorByKey("TextField.inactiveForeground", "nimbusDisabledText");
+    }
+
+    @NotNull
+    private static Color findColorByKey(String... colorKeys) {
+        Color c = null;
+        for (String key : colorKeys) {
+            c = UIManager.getColor(key);
+            if (c != null) {
+                break;
+            }
+        }
+
+        assert c != null : "Can't find color for keys " + Arrays.toString(colorKeys);
+        return c;
+    }
+
+    public Color getChangedValueColor() {
+        return findColorByKey("TextField.foreground");
+    }
 }
